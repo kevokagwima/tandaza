@@ -12,7 +12,6 @@ Flask-Bcrypt==1.0.1
 Flask-Login==0.6.3
 Flask-Migrate==4.0.5
 Flask-SQLAlchemy==3.1.1
-Flask-SSLify==0.1.5
 Flask-WTF==1.2.1
 greenlet==3.0.3
 gunicorn==21.2.0

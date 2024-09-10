@@ -11,7 +11,7 @@ from datetime import datetime
 from questions import game_questions
 from credentials import LipanaMpesaPpassword
 from requests.auth import HTTPBasicAuth
-import requests, random, json, threading, pytz, os
+import requests, random, json, threading, pytz
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -30,8 +30,8 @@ tz = pytz.timezone("Africa/Nairobi")
 def load_user(user_id):
   try:
     return Users.query.filter_by(id=user_id).first()
-  except:
-    return None
+  except Exception as e:
+    flash(f"{repr(e)}", category="info")
 
 @app.before_request
 def app_modules():
