@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% endblock %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block body %}
+<div class="hero">
+  <div class="games-box">
+    {% for game in games %}
+    <a href="{{ url_for('start_game', game_id=game.name) }}">
+      <div class="game">
+        {% if game.name == "Burudani" %}
+        <img src="{{ url_for('static', filename='images/smartphone.png') }}" alt="" class="game-img">
+        {% elif game.name == "Siasa" %}
+        <img src="{{ url_for('static', filename='images/conference.png') }}" alt="" class="game-img">
+        {% elif game.name == "Historia" %}
+        <img src="{{ url_for('static', filename='images/history.png') }}" alt="" class="game-img">
+        {% elif game.name == "Mchezo" %}
+        <img src="{{ url_for('static', filename='images/sports.png') }}" alt="" class="game-img">
+        {% endif %}
+        <h4>{{ game.name }}</h4>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="../static/js/index.js"></script>
+<script src="../static/js/auth.js"></script>
+{% endblock %}

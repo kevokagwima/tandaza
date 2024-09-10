@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/game-summary.css') }}">
+{% endblock %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <div class="summary-box">
+    <h2>Congratulations on completing the game</h2>
+    <p>You scored <b>{{ session_round.score }}</b> out of <b>5</b></p>
+    <a href="{{ url_for('home') }}">
+      <button>Play Again</button>
+    </a>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

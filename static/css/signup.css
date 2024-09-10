@@ -1,0 +1,79 @@
+.account,
+.links {
+  display: none;
+}
+
+.form-box {
+  background-color: transparent;
+  border-radius: var(--radius);
+  padding: 2rem 1rem;
+  max-width: 40%;
+  margin: 2rem auto 0;
+}
+
+#heading {
+  text-align: center;
+  font-size: 6ch;
+}
+
+form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem 2rem;
+  margin-top: 3rem;
+}
+
+form button,
+.info-box,
+.extend {
+  grid-column: 1/3;
+}
+
+.info-box {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+@media screen and (max-width: 1300px) {
+  .form-box {
+    max-width: 50%;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .form-box {
+    max-width: 60%;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .form-box {
+    max-width: 70%;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .form-box {
+    max-width: 90%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .form-box {
+    max-width: 100%;
+  }
+
+  form {
+    grid-template-columns: 1fr;
+  }
+
+  form button,
+  .info-box,
+  .extend {
+    grid-column: 1/2;
+  }
+
+  #heading {
+    font-size: 4.5ch;
+  }
+}

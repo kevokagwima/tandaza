@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/history.css') }}">
+{% endblock %}
+
+{% block title %}
+History
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <h2>Game History</h2>
+  <div class="game-box">
+    {% for session in sessions|sort(attribute="date_started", reverse=true) %}
+    <div class="game-info">
+      <h4>#{{ session.unique_id }}</h4>
+      <hr id="hr">
+      <div class="game-details">
+        <p>Date Started: <b>{{ session.date_started.strftime("%d/%m/%Y at %I:%M %p") }}</b></p>
+        <hr id="hr">
+        {% for round in rounds if round.session == session.id %}
+        <div class="round-info">
+          <p>{{ session.session_game_name.name }}</p>
+          <h4>Score ({{ round.score }}/5)</h4>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

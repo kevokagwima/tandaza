@@ -1,0 +1,12 @@
+form {
+  grid-template-columns: 1fr;
+}
+
+form button,
+.info-box {
+  grid-column: 1/2;
+}
+
+#reset {
+  margin-top: 1rem;
+}

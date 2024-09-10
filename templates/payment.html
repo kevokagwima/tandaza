@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/payment.css') }}">
+{% endblock %}
+
+{% block title %}
+Payment
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <div class="box">
+    <div class="payment-box">
+      <div class="payment basic">
+        <h4>Basic</h4>
+        <h1>Ksh 50</h1>
+        <div class="payment-info">
+          <p>Add upto 5 players only</p>
+        </div>
+        <div class="payment-btns">
+          <a href="{{ url_for('stk_push', pricing='basic') }}">
+            <button class="btn" type="submit">
+              <span class="button--text">Pay Now</span>
+            </button>
+          </a>
+        </div>
+      </div>
+      <div class="payment pro">
+        <h4>Pro</h4>
+        <h1>Ksh 100</h1>
+        <div class="payment-info">
+          <p>This has no player limit.</p>
+        </div>
+        <div class="payment-btns">
+          <a href="{{ url_for('stk_push', pricing='pro') }}">
+            <button class="btn" type="submit">
+              <span class="button--text">Pay Now</span>
+            </button>
+          </a>
+        </div>
+      </div>
+      <h4 id="info">Payment is made every 24hrs.</h4>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="../static/js/auth.js"></script>
+<script src="../static/js/mpesa.js"></script>
+{% endblock %}

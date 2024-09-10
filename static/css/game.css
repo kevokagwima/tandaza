@@ -1,0 +1,154 @@
+.container {
+  padding: 2rem;
+  position: relative;
+}
+
+.session-stats {
+  text-align: center;
+}
+
+.session-stats p {
+  font-size: 2.5ch;
+}
+
+.timer {
+  position: fixed;
+  padding: 1rem;
+  background-color: var(--special-bgcolor);
+  border-radius: var(--radius);
+  font-weight: 800;
+  color: white;
+  inset: 5rem 5rem auto auto;
+  text-align: center;
+  min-width: 10%;
+}
+
+form {
+  max-width: 40%;
+  margin: 2rem auto 0;
+  display: grid;
+}
+
+.game-box {
+  border-radius: var(--radius);
+  display: grid;
+  gap: 2rem;
+}
+
+.questions {
+  border: none;
+  border-radius: var(--radius);
+  display: grid;
+  gap: 1rem;
+  outline: 1px solid var(--grey);
+  padding: 0.5rem;
+}
+
+.questions h4 {
+  font-family: var(--font-1);
+  font-weight: 600;
+}
+
+.no-selection {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.game-btns {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-btns button {
+  background-color: red;
+}
+
+@media screen and (max-width: 1300px) {
+  form {
+    max-width: 50%;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  form {
+    max-width: 60%;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .container {
+    padding-inline: 1rem;
+  }
+
+  form {
+    max-width: 70%;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  form {
+    max-width: 90%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .timer {
+    position: sticky;
+    top: 4rem;
+    font-size: 1.8ch;
+    padding: 0.5rem;
+    margin-top: 0.8rem;
+  }
+
+  form {
+    max-width: 100%;
+  }
+
+  .game-btns {
+    gap: 1rem;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .container {
+    padding-block: 2rem;
+  }
+
+  .game-box h2 {
+    font-size: 2ch;
+  }
+
+  .game-btns {
+    flex-direction: column;
+  }
+
+  .game-btns a button {
+    font-size: 1.5ch;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .session-stats h1 {
+    font-size: 2.5ch;
+  }
+
+  legend,
+  #option {
+    font-size: 2ch;
+  }
+
+  .options {
+    grid-template-columns: 1fr;
+    padding-inline: 0;
+  }
+}

@@ -1,0 +1,55 @@
+.hero {
+  padding: 2rem 5rem;
+}
+
+.games-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  height: max-content;
+}
+
+.games-box a {
+  flex-grow: 1;
+}
+
+.game {
+  padding: 1rem;
+  border-radius: var(--radius);
+  background-color: var(--main-bgcolor);
+  display: grid;
+  gap: 1rem;
+}
+
+.game-img {
+  max-height: 4rem;
+}
+
+.game h4 {
+  color: var(--dark);
+  font-size: 3ch;
+}
+
+@media screen and (max-width: 800px) {
+  .hero {
+    padding-inline: 2rem;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .game h4 {
+    font-size: 2ch;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .hero {
+    padding-inline: 1rem;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .games-box {
+    display: grid;
+  }
+}

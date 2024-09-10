@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/wallet.css') }}">
+{% endblock %}
+
+{% block title %}
+Wallet
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <div class="wallet-box">
+    <div class="wallet-info">
+      <h1>Available Balance</h1>
+      <p><span id="wallet">Ksh 0</span></p>
+    </div>
+    <div class="wallet-actions">
+      <a href="#">
+        <button>Deposit</button>
+      </a>
+      <a href="#">
+        <button>Withdraw</button>
+      </a>
+    </div>
+  </div>
+  <div class="history-box">
+    <div class="history deposit">
+      <h2>Deposit History</h2>
+      <div class="deposit-info-box">
+        {% if deposits %}
+        {% for deposit in deposits %}
+        <div class="deposit-info">
+          <h4>{{ deposit.unique_id }}</h4>
+          <p>{{ "Ksh {:,}".format(deposit.amount) }}</p>
+          <p>{{ deposit.date.strftime("%d/%m/%Y") }}</p>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="else">
+          <p>No Deposits</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="history withdrawal">
+      <h2>Withdrawal History</h2>
+      <div class="withdrawal-info-box">
+        {% if withdrawals %}
+        {% for withdraw in withdrawals %}
+        <div class="withdrawal-info">
+          <h4>{{ withdraw.unique_id }}</h4>
+          <p>{{ "Ksh {:,}".format(withdraw.amount) }}</p>
+          <p>{{ withdraw.date.strftime("%d/%m/%Y") }}</p>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="else">
+          <p>No Withdrawals</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

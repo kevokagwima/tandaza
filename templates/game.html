@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/game.css') }}">
+{% endblock %}
+
+{% block title %}
+{{ session.session_game_name.name }}
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <div class="session-stats">
+    <h1>Maswali za {{ session.session_game_name.name }} </h1>
+    <p><b>#{{ session.unique_id }}</b></p>
+  </div>
+  <div class="timer">
+    <span id="timer"></span>
+  </div>
+  <form id="quizForm" action="{{ url_for('finish_game', session_id=session.unique_id) }}" method="post">
+    <div class="game-box">
+      {% for index, question in questions.items() %}
+      <div class="questions">
+        <h4 class="no-selection">{{ question.question }}</h4>
+        <div class="options">
+          {% for option in question.options %}
+          <label id="option" class="no-selection">
+            <input type="radio" name="answer_{{ question.id }}" value="{{ option }}" required>
+            {{ option }}
+          </label>
+          {% endfor %}
+        </div>
+        <input type="hidden" name="question_{{ question.id }}" value="{{ loop.index0 }}">
+      </div>
+      {% endfor %}
+    </div>
+    <button type="submit">Submit</button>
+  </form>
+  <div class="game-btns">
+    <a href="{{ url_for('quit_game', session_id=session.unique_id) }}">
+      <button class="btn" type="submit">
+        <span class="button--text">Quit Game</span>
+      </button>
+    </a>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+<script src="{{ url_for('static', filename='js/game.js') }}"></script>
+{% endblock %}

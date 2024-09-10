@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+{% endblock %}
+
+{% block title %}
+Sign Up
+{% endblock %}
+
+{% block body %}
+<div class="form-box">
+  <h1 id="heading">Sign Up</h1>
+  <form method="post">
+    {{ form.csrf_token }}
+    <div class="input">
+      {{ form.username.label }}
+      {{ form.username(placeholder="Enter Username", class="name") }}
+    </div>
+    <div class="input">
+      {{ form.phone_number.label }}
+      {{ form.phone_number(placeholder="Enter Phone Number", class="name") }}
+    </div>
+    <div class="input">
+      {{ form.password.label }}
+      {{ form.password(placeholder="Enter Password", class="name") }}
+    </div>
+    <div class="input">
+      {{ form.password1.label }}
+      {{ form.password1(placeholder="Repeat Password", class="name") }}
+    </div>
+    <button class="btn" type="submit">
+      <span class="button--text">Sign Up</span>
+    </button>
+    <div class="info-box">
+      <p>Already have an account? <a href="{{ url_for('signin') }}">Sign In</a></p>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="../static/js/auth.js"></script>
+{% endblock %}

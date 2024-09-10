@@ -1,0 +1,1 @@
+drop table alembic_version

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% block head %}
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  <title>TANDAZA | {% block title %} {% endblock %}</title>
+</head>
+{% endblock %}
+
+<body>
+  <header>
+    <div class="logo">
+      <a href="{{ url_for('home') }}">
+        <img id="logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="tandaza-logo">
+      </a>
+    </div>
+    {% if current_user.is_authenticated %}
+    <div class="account">
+      <a href="{{ url_for('wallet') }}">
+        <div class="wallet">
+          <img src="{{ url_for('static', filename='Images/wallet.png') }}" alt="">
+          <h4>{{ "ksh {:,}".format(current_user.wallet) }}</h4>
+        </div>
+      </a>
+      <div class="account-box">
+        <p>Welcome, <b>{{ current_user.username }}</b></p>
+        <div class="account-info">
+          <a href="{{ url_for('history') }}">
+            <p>History</p>
+          </a>
+          <a id="logout" href="{{ url_for('logout') }}">
+            <p>Logout</p>
+          </a>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="links">
+      <a href="{{ url_for('signup') }}">Sign Up</a>
+      <a href="{{ url_for('signin') }}">Sign In</a>
+    </div>
+    {% endif %}
+    <div class="burger">
+      <div class="div"></div>
+      <div class="div"></div>
+      <div class="div"></div>
+    </div>
+  </header>
+  <div class="side-nav">
+    <span id="close-nav">X</span>
+    <div class="side-nav-box">
+      {% if current_user.is_authenticated %}
+      <p>Welcome,
+        <b>
+          {{ current_user.username }}
+        </b>
+      </p>
+      {% endif %}
+      <a href="{{ url_for('wallet') }}">
+        <div class="wallet">
+          <img src="{{ url_for('static', filename='Images/wallet.png') }}" alt="">
+          <h4>{{ "ksh {:,}".format(current_user.wallet) }}</h4>
+        </div>
+      </a>
+      <a href="{{ url_for('history') }}">History</a>
+      <a id="logout" href="{{ url_for('logout') }}">Logout</a>
+    </div>
+  </div>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="tops">
+    {% for category, message in messages %}
+    <div class="alert alert-{{category}}">
+      <p>{{ message }}</p>
+      <span id="close">X</span>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+
+  {% block body %} {% endblock %}
+
+  {% block script %} {% endblock %}
+  <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+</body>
+
+</html>
