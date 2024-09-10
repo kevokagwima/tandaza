@@ -45,6 +45,7 @@ class Games(db.Model):
   id = db.Column(db.Integer(), primary_key=True)
   name = db.Column(db.String(50), nullable=False)
   session = db.relationship("Session", backref="session_game_name", lazy=True)
+  rounds = db.relationship("Rounds", backref="round_game", lazy=True)
 
 class Rounds(db.Model):
   __tablename__ = "rounds"
@@ -53,6 +54,7 @@ class Rounds(db.Model):
   date_started = db.Column(db.DateTime())
   score = db.Column(db.Integer, default=0)
   session = db.Column(db.Integer(), db.ForeignKey("session.id"))
+  game = db.Column(db.Integer(), db.ForeignKey("games.id"))
   is_active = db.Column(db.Boolean(), default=True)
 
 class Payment(db.Model):

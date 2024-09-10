@@ -22,7 +22,7 @@ History
         <hr id="hr">
         {% for round in rounds if round.session == session.id %}
         <div class="round-info">
-          <p>{{ session.session_game_name.name }}</p>
+          <p>{{ round.round_game.name }}</p>
           <h4>Score ({{ round.score }}/5)</h4>
         </div>
         {% endfor %}

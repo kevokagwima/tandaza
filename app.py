@@ -278,7 +278,8 @@ def play_game(session_id):
       new_round = Rounds(
         unique_id = random.randint(100000,999999),
         date_started = datetime.now(),
-        session = session.id
+        session = session.id,
+        game = session.game
       )
       db.session.add(new_round)
       db.session.commit()
@@ -354,8 +355,9 @@ def quit_game(session_id):
     return redirect(url_for('home'))
 
 @app.route("/history")
+@login_required
 def history():
-  sessions = Session.query.filter_by(user=current_user.id, is_active=False).all()
+  sessions = Session.query.filter_by(user=current_user.id).all()
   rounds = Rounds.query.all()
   return render_template("history.html", sessions=sessions, rounds=rounds)
 

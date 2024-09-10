@@ -1,1 +1,1 @@
-delete from "session"
+drop table alembic_version
