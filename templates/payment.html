@@ -2,52 +2,34 @@
 
 {% block head %}
 {{ super() }}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/payment.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/signin.css') }}">
 {% endblock %}
 
 {% block title %}
-Payment
+{{ heading }}
 {% endblock %}
 
 {% block body %}
-<div class="container">
-  <div class="box">
-    <div class="payment-box">
-      <div class="payment basic">
-        <h4>Basic</h4>
-        <h1>Ksh 50</h1>
-        <div class="payment-info">
-          <p>Add upto 5 players only</p>
-        </div>
-        <div class="payment-btns">
-          <a href="{{ url_for('stk_push', pricing='basic') }}">
-            <button class="btn" type="submit">
-              <span class="button--text">Pay Now</span>
-            </button>
-          </a>
-        </div>
-      </div>
-      <div class="payment pro">
-        <h4>Pro</h4>
-        <h1>Ksh 100</h1>
-        <div class="payment-info">
-          <p>This has no player limit.</p>
-        </div>
-        <div class="payment-btns">
-          <a href="{{ url_for('stk_push', pricing='pro') }}">
-            <button class="btn" type="submit">
-              <span class="button--text">Pay Now</span>
-            </button>
-          </a>
-        </div>
-      </div>
-      <h4 id="info">Payment is made every 24hrs.</h4>
+<div class="form-box">
+  <h1 id="heading">{{ heading }}</h1>
+  <form method="post">
+    {{ form.csrf_token }}
+    <div class="input">
+      {{ form.amount.label }}
+      {{ form.amount(placeholder="Enter Deposit Amount", class="name") }}
     </div>
-  </div>
+    <div class="input">
+      {{ form.phone_number.label }}
+      {{ form.phone_number(placeholder="Enter Phone Number", class="name") }}
+    </div>
+    <button class="btn" type="submit">
+      <span class="button--text">Deposit</span>
+    </button>
+  </form>
 </div>
 {% endblock %}
 
 {% block script %}
 <script src="../static/js/auth.js"></script>
-<script src="../static/js/mpesa.js"></script>
 {% endblock %}

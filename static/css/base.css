@@ -299,7 +299,7 @@ button:disabled {
   font-family: var(--text-font-1);
   text-align: center;
   position: relative;
-  animation: fade-away 0.5s forwards 6s ease-out;
+  /* animation: fade-away 0.5s forwards 6s ease-out; */
 }
 
 #close,

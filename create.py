@@ -6,13 +6,13 @@ app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
 
-def create_tables():
-  db.create_all()
-  print("Tables created")
-
 def drop_tables():
   db.drop_all()
   print("Tables dropped")
+
+def create_tables():
+  db.create_all()
+  print("Tables created")
 
 def add_games():
   game = Games(

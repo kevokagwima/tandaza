@@ -19,18 +19,11 @@ Sign In
       {{ form.username.label }}
       {{ form.username(placeholder="Enter Username", class="name") }}
     </div>
-    <div class="input">
-      {{ form.password.label }}
-      {{ form.password(placeholder="Enter Password", class="name") }}
-    </div>
     <button class="btn" type="submit">
       <span class="button--text">Sign In</span>
     </button>
     <div class="info-box">
       <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign Up</a></p>
-      <p id="reset">
-        <a href="{{ url_for('reset_password') }}">Reset Password</a>
-      </p>
     </div>
   </form>
 </div>

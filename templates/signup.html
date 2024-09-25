@@ -22,13 +22,9 @@ Sign Up
       {{ form.phone_number.label }}
       {{ form.phone_number(placeholder="Enter Phone Number", class="name") }}
     </div>
-    <div class="input">
-      {{ form.password.label }}
-      {{ form.password(placeholder="Enter Password", class="name") }}
-    </div>
-    <div class="input">
-      {{ form.password1.label }}
-      {{ form.password1(placeholder="Repeat Password", class="name") }}
+    <div class="input extend">
+      {{ form.referral_code.label }}
+      {{ form.referral_code(placeholder="Enter Referral Code", class="name") }}
     </div>
     <button class="btn" type="submit">
       <span class="button--text">Sign Up</span>

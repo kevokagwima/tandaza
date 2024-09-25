@@ -1,7 +1,6 @@
 from flask import Flask, render_template,  jsonify, redirect, url_for, flash, request
 from flask_login import LoginManager, login_manager, login_user, logout_user, current_user, login_required
 from flask_migrate import Migrate
-from flask_bcrypt import generate_password_hash
 from flask_sslify import SSLify
 from models import *
 from form import *
@@ -11,7 +10,7 @@ from datetime import datetime
 from questions import game_questions
 from credentials import LipanaMpesaPpassword
 from requests.auth import HTTPBasicAuth
-import requests, random, json, threading, pytz
+import requests, random, json, threading, pytz, uuid
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -33,36 +32,35 @@ def load_user(user_id):
   except Exception as e:
     flash(f"{repr(e)}", category="info")
 
-@app.before_request
-def app_modules():
-  check_user_account_expiry()
-
-def check_user_account_expiry():
-  today = datetime.now()
-  users = Users.query.all()
-  for user in users:
-    if user.last_login:
-      diff = today - user.last_login
-      diff_hours = diff.total_seconds() / 3600
-      if int(diff_hours) > 24:
-        user.status = False
-        db.session.commit()
-
 @app.route("/signup", methods=["POST", "GET"])
 def signup():
   try:
     form = RegistrationForm()
     if form.validate_on_submit():
-      new_user = Users(
-        username = form.username.data,
-        phone_number = form.phone_number.data,
-        passwords = form.password.data
-      )
-      db.session.add(new_user)
-      new_user.status = True
-      db.session.commit()
-      flash("Account created successfully", category="success")
-      return redirect(url_for('signin'))
+      if form.referral_code.data:
+        if verify_referral_code(form.referral_code.data):
+          new_user = Users(
+            username = form.username.data,
+            phone_number = form.phone_number.data,
+            referral_code = str(uuid.uuid4()).replace('-', '')[:10],
+          )
+          db.session.add(new_user)
+          db.session.commit()
+          flash("Account created successfully", category="success")
+          return redirect(url_for('signin'))
+        else:
+          flash("Invalid referral code", category="danger")
+          return redirect(url_for('signup'))
+      else:
+        new_user = Users(
+          username = form.username.data,
+          phone_number = form.phone_number.data,
+          referral_code = str(uuid.uuid4()).replace('-', '')[:10],
+        )
+        db.session.add(new_user)
+        db.session.commit()
+        flash("Account created successfully", category="success")
+        return redirect(url_for('signin'))
     
     if form.errors != {}:
       for err_msg in form.errors.values():
@@ -72,7 +70,14 @@ def signup():
     return render_template("signup.html", form=form)
   except Exception as e:
     flash(f"{repr(e)}", category="danger")
-    return redirect(url_for('home'))
+    return redirect(url_for('signup'))
+
+def verify_referral_code(code):
+  user = Users.query.filter_by(referral_code=code).first()
+  if not user:
+    return False
+  else:
+    return True
 
 @app.route("/signin", methods=["POST", "GET"])
 def signin():
@@ -80,24 +85,16 @@ def signin():
     form = LoginForm()
     if form.validate_on_submit():
       user = Users.query.filter_by(username=form.username.data).first()
-      if user:
-        if user.check_password_correction(attempted_password=form.password.data):
-          login_user(user, remember=True)
-          if user.status == False:
-            flash("Your account is inactive. Complete payment to proceed", category="info")
-            return redirect(url_for('payment'))
-          else:
-            user.last_login = datetime.now()
-            db.session.commit()
-            next = request.args.get("next")
-            flash("Login successfull", category="success")
-            return redirect(next or url_for('home'))
-        else:
-          flash("Invalid credentials", category="danger")
-          return redirect(url_for('signin'))
-      else:
+      if not user:
         flash("No user with that username", category="danger")
-        return redirect(url_for('signin'))
+      else:
+        login_user(user, remember=True)
+        user.last_login = datetime.now()
+        db.session.commit()
+        next = request.args.get("next")
+        flash("Login successfull", category="success")
+        return redirect(next or url_for('home'))
+      return redirect(url_for('signin'))
       
     if form.errors != {}:
       for err_msg in form.errors.values():
@@ -105,33 +102,8 @@ def signin():
         return redirect(url_for('signin'))
 
     return render_template("signin.html", form=form)
-  except:
-    flash("An error occurred", category="danger")
-    return redirect(url_for('home'))
-
-@app.route("/reset-password", methods=["POST", "GET"])
-def reset_password():
-  try:
-    form = ResetPasswordForm()
-    if form.validate_on_submit():
-      user = Users.query.filter_by(username=form.username.data).first()
-      if user:
-        user.password = generate_password_hash(form.new_password.data).decode("utf-8")
-        db.session.commit()
-        flash("Password changed successfully", category="success")
-        return redirect(url_for('signin'))
-      else:
-        flash("No account associated with that email address", category="danger")
-        return redirect(url_for('reset_password'))
-    
-    if form.errors != {}:
-      for err_msg in form.errors.values():
-        flash(f"{err_msg}", category="danger")
-        return redirect(url_for('reset_password'))
-
-    return render_template("reset-password.html", form=form)
-  except:
-    flash("An error occurred", category="danger")
+  except Exception as e:
+    flash(f"{repr(e)}", category="danger")
     return redirect(url_for('home'))
 
 @app.route("/")
@@ -148,10 +120,19 @@ def wallet():
   withdrawals = Withdrawal.query.all()
   return render_template("wallet.html", deposits=deposits, withdrawals=withdrawals)
 
-@app.route("/payment")
+@app.route("/deposit")
 @login_required
-def payment():
-  return render_template("payment.html")
+def deposit():
+  form = DepositForm()
+  heading = "Deposit"
+  return render_template("payment.html", heading=heading, form=form)
+
+@app.route("/withdraw")
+@login_required
+def withdraw():
+  form = WithdrawForm()
+  heading = "Withdraw"
+  return render_template("payment.html", heading=heading, form=form)
 
 def getAccessToken(api_URL, consumer_key, consumer_secret):
   try:

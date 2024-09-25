@@ -9,26 +9,14 @@ class Users(db.Model, UserMixin):
   __tablename__ = "users"
   id = db.Column(db.Integer(), primary_key=True)
   username = db.Column(db.String(50), nullable=False)
-  phone_number = db.Column(db.Integer(), nullable=False)
-  password = db.Column(db.String(100), nullable=False)
+  phone_number = db.Column(db.String(10), nullable=False)
   last_login = db.Column(db.DateTime())
-  status = db.Column(db.Boolean(), default=False)
   wallet = db.Column(db.Integer, default=0)
+  referral_code = db.Column(db.String(10), nullable=False)
   session = db.relationship("Session", backref="owner", lazy=True)
   payment = db.relationship("Payment", backref="user_payment", lazy=True)
   deposit = db.relationship("Deposit", backref="deposits", lazy=True)
   withdraw = db.relationship("Withdrawal", backref="withdrawals", lazy=True)
-
-  @property
-  def passwords(self):
-    return self.passwords
-
-  @passwords.setter
-  def passwords(self, plain_text_password):
-    self.password = bcrypt.generate_password_hash(plain_text_password).decode("utf-8")
-
-  def check_password_correction(self, attempted_password):
-    return bcrypt.check_password_hash(self.password, attempted_password)
 
 class Session(db.Model):
   __tablename__ = "session"
