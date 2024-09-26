@@ -195,7 +195,7 @@ def stk_push():
     flash(f"{repr(e)}", category="danger")
     return redirect(url_for('wallet'))
 
-@app.route("/confirm-payment/", methods=["POST", "GET"])
+@app.route("/confirm-payment/", methods=["POST"])
 @login_required
 def confirm_payment():
   try:

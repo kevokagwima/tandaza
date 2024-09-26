@@ -11,7 +11,7 @@ async function sendFetchRequest() {
       alert("ok");
       console.log("Fetch request successful:", response.status);
     } else {
-      alert("eror");
+      alert("error");
       console.error("Fetch request failed:", response.status);
     }
   } catch (error) {
