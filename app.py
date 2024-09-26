@@ -172,6 +172,7 @@ def process_stk_push(access_token, amount, phone_number):
   return response
 
 @app.route("/process-payment/send-stk-push", methods=["POST"])
+@login_required
 def stk_push():
   form = WalletForm()
   consumer_key = 'M0scBRv7OQJAehMiEVFylazm2SvfqqTvKuGbh3fwTfPtCjO6'
@@ -195,6 +196,7 @@ def stk_push():
     return redirect(url_for('wallet'))
 
 @app.route("/confirm-payment/", methods=["POST"])
+@login_required
 def confirm_payment():
   json_data = request.get_json()
     
@@ -202,7 +204,6 @@ def confirm_payment():
   stk_callback = json_data['Body']['stkCallback']
   result_code = stk_callback['ResultCode']
 
-  print(json_data)
   print(stk_callback)
   print(result_code)
 
@@ -217,7 +218,6 @@ def confirm_payment():
     checkout_request_id = stk_callback['CheckoutRequestID']
     metadata = {item['Name']: item['Value'] for item in stk_callback['CallbackMetadata']['Item'] if 'Value' in item}
     mpesa_receipt_number = metadata.get('MpesaReceiptNumber')
-    transaction_date = metadata.get('TransactionDate')
     amount = metadata.get('Amount')
     phone_number = metadata.get('PhoneNumber')
 
