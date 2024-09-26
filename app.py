@@ -199,44 +199,37 @@ def stk_push():
 @login_required
 def confirm_payment():
   json_data = request.get_json()
+  print(json_data)
     
   # Extract necessary information from the JSON data
   stk_callback = json_data['Body']['stkCallback']
-  result_code = stk_callback['ResultCode']
-
-  print(json_data)
-
+  metadata = {
+    item['Name']: item['Value'] for item in stk_callback['CallbackMetadata']['Item'] if 'Value' in item
+  }
   # Process the data (e.g., save to database, log, etc.)
-  if result_code != 0:
-    response = {
-      "ResultCode": stk_callback['ResultCode'],
-      "ResultDesc": stk_callback['ResultDesc']
-    }
-  else:
-    merchant_request_id = stk_callback['MerchantRequestID']
-    checkout_request_id = stk_callback['CheckoutRequestID']
-    metadata = {item['Name']: item['Value'] for item in stk_callback['CallbackMetadata']['Item'] if 'Value' in item}
-    mpesa_receipt_number = metadata.get('MpesaReceiptNumber')
-    amount = metadata.get('Amount')
-    phone_number = metadata.get('PhoneNumber')
+  merchant_request_id = stk_callback['MerchantRequestID']
+  checkout_request_id = stk_callback['CheckoutRequestID']
+  mpesa_receipt_number = metadata.get('MpesaReceiptNumber')
+  amount = metadata.get('Amount')
+  phone_number = metadata.get('PhoneNumber')
 
-    new_payment = Payment(
-      MerchantRequestID = merchant_request_id,
-      CheckoutRequestID = checkout_request_id,
-      MpesaReceiptNumber = mpesa_receipt_number,
-      transactionDate = datetime.now(),
-      amount = amount,
-      phone_number = phone_number,
-      user = current_user.id
-    )
-    db.session.add(new_payment)
-    db.session.commit()
+  new_payment = Payment(
+    MerchantRequestID = merchant_request_id,
+    CheckoutRequestID = checkout_request_id,
+    MpesaReceiptNumber = mpesa_receipt_number,
+    transactionDate = datetime.now(),
+    amount = amount,
+    phone_number = phone_number,
+    user = current_user.id
+  )
+  db.session.add(new_payment)
+  db.session.commit()
 
-    # Respond to M-Pesa
-    response = {
-      "ResultCode": stk_callback['ResultCode'],
-      "ResultDesc": stk_callback['ResultDesc']
-    }
+  # Respond to M-Pesa
+  response = {
+    "ResultCode": stk_callback['ResultCode'],
+    "ResultDesc": stk_callback['ResultDesc']
+  }
   return jsonify(response)
 
 @app.route("/payment-complete")
