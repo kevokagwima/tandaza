@@ -1,14 +1,10 @@
 async function sendFetchRequest() {
   try {
-    const response = await fetch("/confirm-payment", {
-      method: "POST",
+    const response = await fetch("/confirm-payment/", {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        result_code: "your_result_code",
-        transaction_id: "your_transaction_id",
-      }),
     });
 
     if (response.ok) {
