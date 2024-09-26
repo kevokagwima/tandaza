@@ -209,6 +209,8 @@ def confirm_payment():
   phone_number = metadata.get('PhoneNumber')
 
   # Process the data (e.g., save to database, log, etc.)
+  print(stk_callback)
+  
   if result_code != 0:
     response = {
       "ResultCode": stk_callback['ResultCode'],
