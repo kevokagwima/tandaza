@@ -202,13 +202,14 @@ def confirm_payment():
   transaction_id = json_data.get("Body", {}).get("stkCallback", {}).get("CallbackMetadata", {}).get("Item", [])[0].get("Value")
 
   # Process the data (e.g., save to database, log, etc.)
+  print(f"Full Data: {json_data}")
   print(f"Result Code: {result_code}")
   print(f"Transaction ID: {transaction_id}")
 
   # Respond to M-Pesa
   response = {
-      "ResultCode": 0,
-      "ResultDesc": "Success"
+    "ResultCode": 0,
+    "ResultDesc": "Success"
   }
   return jsonify(response)
 
