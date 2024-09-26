@@ -116,9 +116,10 @@ def home():
 @app.route("/wallet")
 @login_required
 def wallet():
+  payments = Deposit.query.all()
   deposits = Deposit.query.all()
   withdrawals = Withdrawal.query.all()
-  return render_template("wallet.html", deposits=deposits, withdrawals=withdrawals)
+  return render_template("wallet.html", deposits=deposits, withdrawals=withdrawals, payments=payments)
 
 @app.route("/deposit")
 @login_required
@@ -224,7 +225,7 @@ def confirm_payment():
       MerchantRequestID = merchant_request_id,
       CheckoutRequestID = checkout_request_id,
       MpesaReceiptNumber = mpesa_receipt_number,
-      transactionDate = transaction_date,
+      transactionDate = datetime.now(),
       amount = amount,
       phone_number = phone_number,
       user = current_user.id
