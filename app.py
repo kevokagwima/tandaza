@@ -204,8 +204,7 @@ def confirm_payment():
   stk_callback = json_data['Body']['stkCallback']
   result_code = stk_callback['ResultCode']
 
-  print(stk_callback)
-  print(result_code)
+  print(json_data)
 
   # Process the data (e.g., save to database, log, etc.)
   if result_code != 0:
