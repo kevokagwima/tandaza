@@ -246,7 +246,7 @@ def payment_complete():
 
 @app.route("/start-game/<string:game_id>")
 @login_required
-# @check_rounds
+@check_rounds
 def start_game(game_id):
   game = Games.query.filter_by(name=game_id).first()
   existing_session = Session.query.filter_by(user=current_user.id, is_active=True).first()
@@ -270,7 +270,7 @@ def start_game(game_id):
 
 @app.route("/play-game/<int:session_id>")
 @login_required
-# @check_rounds
+@check_rounds
 def play_game(session_id):
   session = Session.query.filter_by(unique_id=session_id).first()
   if not session:
@@ -300,7 +300,7 @@ def play_game(session_id):
     return render_template("game.html", session=session, questions=question_ids)
 
 @app.route('/finish_game/<int:session_id>', methods=['POST'])
-# @check_rounds
+@check_rounds
 def finish_game(session_id):
   session = Session.query.filter_by(unique_id=session_id).first()
   if not session:
