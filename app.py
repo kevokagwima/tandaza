@@ -201,6 +201,7 @@ def confirm_payment():
   stk_callback = json_data['Body']['stkCallback']
   result_code = stk_callback['ResultCode']
 
+  print(json_data)
   print(stk_callback)
   print(result_code)
 
