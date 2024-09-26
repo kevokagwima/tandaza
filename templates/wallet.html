@@ -14,7 +14,7 @@ Wallet
   <div class="wallet-box">
     <div class="wallet-info">
       <h1>Available Balance</h1>
-      <p><span id="wallet">Ksh 0</span></p>
+      <p><span id="wallet">{{ "Ksh {:,}".format(current_user.wallet) }}</span></p>
     </div>
     <div class="wallet-actions">
       <a href="{{ url_for('deposit') }}">

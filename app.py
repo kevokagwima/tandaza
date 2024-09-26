@@ -123,14 +123,14 @@ def wallet():
 @app.route("/deposit")
 @login_required
 def deposit():
-  form = DepositForm()
+  form = WalletForm()
   heading = "Deposit"
   return render_template("payment.html", heading=heading, form=form)
 
 @app.route("/withdraw")
 @login_required
 def withdraw():
-  form = WithdrawForm()
+  form = WalletForm()
   heading = "Withdraw"
   return render_template("payment.html", heading=heading, form=form)
 
@@ -144,7 +144,7 @@ def getAccessToken(api_URL, consumer_key, consumer_secret):
   except json.decoder.JSONDecodeError:
     jsonify({'error': 'Failed to decode JSON response from Safaricom API'})
 
-def process_stk_push(access_token, amount):
+def process_stk_push(access_token, amount, phone_number):
   api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
 
   headers = {
@@ -157,11 +157,11 @@ def process_stk_push(access_token, amount):
     "Timestamp": LipanaMpesaPpassword.lipa_time,
     "TransactionType": "CustomerPayBillOnline",
     "Amount": amount,
-    "PartyA": f"254796897011",
+    "PartyA": f"254{phone_number}",
     "PartyB": LipanaMpesaPpassword.Business_short_code,
     "PhoneNumber": f"254796897011",
     "checkout_url": "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
-    "CallBackURL": "https://tandaza-8e9c405ba062.herokuapp.com/confirm-payment",
+    "CallBackURL": "https://tandaza-d792c1108bcd.herokuapp.com/confirm-payment/",
     "AccountReference": "Tandaza",
     "TransactionDesc": "Testing stk push"
   }
@@ -170,31 +170,28 @@ def process_stk_push(access_token, amount):
 
   return response
 
-@app.route("/process-payment/send-stk-push/<string:pricing>")
-def stk_push(pricing):
+@app.route("/process-payment/send-stk-push", methods=["POST"])
+def stk_push():
+  form = WalletForm()
   consumer_key = 'M0scBRv7OQJAehMiEVFylazm2SvfqqTvKuGbh3fwTfPtCjO6'
   consumer_secret = 'ZBpJnS4vRo6rYIztbpsVVgHMEtdY2dHpA4LQ7NRNXKe57TsmHIAjjqiRPGfbfBgL'
   api_URL = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
 
   access_token = getAccessToken(api_URL, consumer_key, consumer_secret)
-
-  if pricing == "basic":
-    amount = 1
-  else:
-    amount = 1
-
+  phone_number = form.phone_number.data
+  amount = form.amount.data
   try:
-    response = process_stk_push(access_token, amount)
+    response = process_stk_push(access_token, amount, phone_number)
     print(response)
     if response.status_code != 200:
       flash("Could not complete payment. Try again", category="danger")
-      return redirect(url_for('payment'))
+      return redirect(url_for('wallet'))
     else:
       flash("An stk push has been sent to your phone. Enter your pin to complete the payment", category="success")
-      return redirect(url_for('payment'))
+      return redirect(url_for('wallet'))
   except Exception as e:
     flash(f"{repr(e)}", category="danger")
-    return redirect(url_for('payment'))
+    return redirect(url_for('wallet'))
 
 @app.route("/confirm-payment/", methods=["POST"])
 def confirm_payment():
@@ -223,7 +220,7 @@ def payment_complete():
 
 @app.route("/start-game/<string:game_id>")
 @login_required
-@check_rounds
+# @check_rounds
 def start_game(game_id):
   game = Games.query.filter_by(name=game_id).first()
   existing_session = Session.query.filter_by(user=current_user.id, is_active=True).first()
@@ -247,7 +244,7 @@ def start_game(game_id):
 
 @app.route("/play-game/<int:session_id>")
 @login_required
-@check_rounds
+# @check_rounds
 def play_game(session_id):
   session = Session.query.filter_by(unique_id=session_id).first()
   if not session:
@@ -277,7 +274,7 @@ def play_game(session_id):
     return render_template("game.html", session=session, questions=question_ids)
 
 @app.route('/finish_game/<int:session_id>', methods=['POST'])
-@check_rounds
+# @check_rounds
 def finish_game(session_id):
   session = Session.query.filter_by(unique_id=session_id).first()
   if not session:
@@ -312,6 +309,8 @@ def game_summary(round_id):
   if not session_round:
     flash("Could not load game summary", category="danger")
     return redirect(url_for('home'))
+  if session_round.score == 5:
+    current_user.wallet = current_user.wallet + 1000
   session = Session.query.filter_by(id=session_round.session).first()
   if not session:
     flash("No session found", category="danger")

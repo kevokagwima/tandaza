@@ -12,7 +12,11 @@ Home
 {% block body %}
 <div class="container">
   <div class="summary-box">
-    <h2>Congratulations on completing the game</h2>
+    {% if session_round.score == 5 %}
+    <h2>Congratulations You got all questions correct</h2>
+    {% else %}
+    <h2>Better luck in the next round</h2>
+    {% endif %}
     <p>You scored <b>{{ session_round.score }}</b> out of <b>5</b></p>
     <a href="{{ url_for('home') }}">
       <button>Play Again</button>

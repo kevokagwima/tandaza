@@ -23,7 +23,7 @@
       <a href="{{ url_for('wallet') }}">
         <div class="wallet">
           <img src="{{ url_for('static', filename='images/wallet.png') }}" alt="">
-          <h4>Ksh 0</h4>
+          <h4>{{ "Ksh {:,}".format(current_user.wallet) }}</h4>
         </div>
       </a>
       <div class="account-box">

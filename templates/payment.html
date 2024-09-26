@@ -13,7 +13,7 @@
 {% block body %}
 <div class="form-box">
   <h1 id="heading">{{ heading }}</h1>
-  <form method="post">
+  <form action="{{ url_for('stk_push') }}" method="post">
     {{ form.csrf_token }}
     <div class="input">
       {{ form.amount.label }}

@@ -24,10 +24,6 @@ class RegistrationForm(FlaskForm):
 class LoginForm(FlaskForm):
   username = StringField(label="Username", validators=[DataRequired(message="Username field is required")])
 
-class DepositForm(FlaskForm):
+class WalletForm(FlaskForm):
   amount = StringField(label="Deposit Amount", validators=[DataRequired(message="Deposit amount field is required")])
-  phone_number = StringField(label="Phone Number", validators=[DataRequired(message="Phone number field is required")])
-
-class WithdrawForm(FlaskForm):
-  amount = StringField(label="Withdraw Amount", validators=[DataRequired(message="Withdraw amount field is required")])
   phone_number = StringField(label="Phone Number", validators=[DataRequired(message="Phone number field is required")])
