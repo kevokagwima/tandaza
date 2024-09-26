@@ -49,6 +49,12 @@ class Payment(db.Model):
   __tablename__ = "payment"
   id = db.Column(db.Integer(), primary_key=True)
   unique_id = db.Column(db.Integer(), unique=True)
+  MerchantRequestID = db.Column(db.String())
+  CheckoutRequestID = db.Column(db.String())
+  MpesaReceiptNumber = db.Column(db.String())
+  transactionDate = db.Column(db.DateTime())
+  amount = db.Column(db.Integer())
+  phone_number = db.Column(db.String(10))
   is_pending = db.Column(db.Boolean(), default=True)
   is_confirmed = db.Column(db.Boolean(), default=False)
   user = db.Column(db.Integer(), db.ForeignKey("users.id"))
