@@ -29,14 +29,7 @@ Wallet
     <div class="history deposit">
       <h2>Deposit History</h2>
       <div class="deposit-info-box">
-        <!-- {% for payment in payments %}
-        {{ payment.MerchantRequestID }}
-        {{ payment.CheckoutRequestID }}
-        {{ payment.MpesaReceiptNumber }}
-        {{ payment.transactionDate }}
-        {{ payemnt.amount }}
-        {{ payemnt.phone_number }}
-        {% endfor %} -->
+        {{ payments }}
         {% if deposits %}
         {% for deposit in deposits %}
         <div class="deposit-info">

@@ -160,7 +160,7 @@ def process_stk_push(access_token, amount, phone_number):
     "Amount": amount,
     "PartyA": f"254{phone_number}",
     "PartyB": LipanaMpesaPpassword.Business_short_code,
-    "PhoneNumber": f"254796897011",
+    "PhoneNumber": f"254{phone_number}",
     "checkout_url": "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
     "CallBackURL": "https://tandaza-d792c1108bcd.herokuapp.com/confirm-payment/",
     "AccountReference": "Tandaza",
