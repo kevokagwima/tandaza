@@ -160,7 +160,7 @@ def process_stk_push(access_token, amount, phone_number):
     "Amount": amount,
     "PartyA": f"254{phone_number}",
     "PartyB": LipanaMpesaPpassword.Business_short_code,
-    "PhoneNumber": "254796897011",
+    "PhoneNumber": f"254{phone_number}",
     "checkout_url": "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
     "CallBackURL": "https://tandaza-d792c1108bcd.herokuapp.com/confirm-payment/",
     "AccountReference": "Tandaza",
@@ -180,7 +180,7 @@ def stk_push():
   api_URL = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
 
   access_token = getAccessToken(api_URL, consumer_key, consumer_secret)
-  phone_number = form.phone_number.data
+  phone_number = form.phone_number.data[1:]
   amount = form.amount.data
   try:
     response = process_stk_push(access_token, amount, phone_number)
