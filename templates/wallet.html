@@ -17,10 +17,10 @@ Wallet
       <p><span id="wallet">{{ "Ksh {:,}".format(current_user.wallet) }}</span></p>
     </div>
     <div class="wallet-actions">
-      <a href="{{ url_for('deposit') }}">
+      <a href="{{ url_for('payment', payment_method='deposit') }}">
         <button>Deposit</button>
       </a>
-      <a href="{{ url_for('withdraw') }}">
+      <a href="{{ url_for('payment', payment_method='withdraw') }}">
         <button>Withdraw</button>
       </a>
     </div>
@@ -29,7 +29,6 @@ Wallet
     <div class="history deposit">
       <h2>Deposit History</h2>
       <div class="deposit-info-box">
-        {{ payments }}
         {% if deposits %}
         {% for deposit in deposits %}
         <div class="deposit-info">

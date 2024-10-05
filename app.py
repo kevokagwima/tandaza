@@ -116,23 +116,18 @@ def home():
 @app.route("/wallet")
 @login_required
 def wallet():
-  payments = Deposit.query.all()
   deposits = Deposit.query.all()
   withdrawals = Withdrawal.query.all()
-  return render_template("wallet.html", deposits=deposits, withdrawals=withdrawals, payments=payments)
+  return render_template("wallet.html", deposits=deposits, withdrawals=withdrawals)
 
-@app.route("/deposit")
+@app.route("/payment/<string:payment_method>")
 @login_required
-def deposit():
+def payment(payment_method):
   form = WalletForm()
-  heading = "Deposit"
-  return render_template("payment.html", heading=heading, form=form)
-
-@app.route("/withdraw")
-@login_required
-def withdraw():
-  form = WalletForm()
-  heading = "Withdraw"
+  if payment_method == "deposit":
+    heading = "Deposit"
+  else:
+    heading = "Withdraw"
   return render_template("payment.html", heading=heading, form=form)
 
 def getAccessToken(api_URL, consumer_key, consumer_secret):
@@ -171,9 +166,9 @@ def process_stk_push(access_token, amount, phone_number):
 
   return response
 
-@app.route("/process-payment/send-stk-push", methods=["POST"])
+@app.route("/process-payment/<string:payment_type>", methods=["POST"])
 @login_required
-def stk_push():
+def stk_push(payment_type):
   form = WalletForm()
   consumer_key = 'M0scBRv7OQJAehMiEVFylazm2SvfqqTvKuGbh3fwTfPtCjO6'
   consumer_secret = 'ZBpJnS4vRo6rYIztbpsVVgHMEtdY2dHpA4LQ7NRNXKe57TsmHIAjjqiRPGfbfBgL'
@@ -182,6 +177,15 @@ def stk_push():
   access_token = getAccessToken(api_URL, consumer_key, consumer_secret)
   phone_number = form.phone_number.data[1:]
   amount = form.amount.data
+  if payment_type == "Deposit":
+    deposit = Deposit(
+      unique_id = random.randint(100000,999999),
+      user = current_user.id,
+      amount = amount,
+      phone_number = phone_number
+    )
+    db.session.add(deposit)
+    db.session.commit()
   try:
     response = process_stk_push(access_token, amount, phone_number)
     print(response)

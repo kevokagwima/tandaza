@@ -4,6 +4,7 @@
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/signin.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/payment.css') }}">
 {% endblock %}
 
 {% block title %}
@@ -13,7 +14,7 @@
 {% block body %}
 <div class="form-box">
   <h1 id="heading">{{ heading }}</h1>
-  <form action="{{ url_for('stk_push') }}" method="post">
+  <form action="{{ url_for('stk_push', payment_type=heading) }}" method="post">
     {{ form.csrf_token }}
     <div class="input">
       {{ form.amount.label }}
